@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd rtems/testsuites/smptests
+../../bootstrap -c
+../../bootstrap
+cd ../../../..
+rm -r realview_pbx_a9_qemu_smp/*
+rm -r bsps/5-a
+cd realview_pbx_a9_qemu_smp
+$HOME/dev/rtems/src/rtems/configure --target=arm-rtems5 --enable-rtemsbsp=realview_pbx_a9_qemu_smp --enable-tests=yes --enable-networking --enable-posix --enable-smp --prefix=$HOME/dev/rtems/bsps/5-a
+make -j4
+make install
+notify-send "TERMINAL" "Finished running"
