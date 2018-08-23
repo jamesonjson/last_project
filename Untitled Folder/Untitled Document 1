@@ -1,0 +1,82 @@
+rtems_task Water_flow_sensor(){
+  rtems_status_code sc;
+  rtems_id period_id, setup_period_id, timer_id;
+  rtems_name name; 
+  rtems_interval period=1000, setup_period=4000, deadline=40;
+  
+  rtems_rate_monotonic_create(rtems_build_name('P','E','R','4'), &period_id);
+  rtems_rate_monotonic_create(rtems_build_name('S','E','T','4'),&setup_period_id);
+  /* creation of timer, represents the constraint deadline */
+  rtems_timer_create(rtems_build_name('T','M','R','4'),&timer_id);
+
+  while(1){
+    if(set_up)
+    {
+      rtems_rate_monotonic_period(period_id, period);
+      rtems_timer_fire_after(timer_id, deadline, time_expired_water_flow_sensor,NULL);
+
+      int r = (rand() % 100) + 1;
+
+      if(pump.is_on()){
+        if(r < 2)
+        { //case water's not flowing, when it should
+          //signal console
+        }
+      }
+      else
+      {
+        if(r < 2)
+        { //case water's flowing, when it shouldn't
+        //signal console
+        }
+      } 
+      rtems_timer_cancel(timer_id);
+
+    }
+    else
+    {
+      rtems_rate_monotonic_period(setup_period_id, setup_period);
+        sc=rtems_barrier_wait(barrier_id,RTEMS_NO_TIMEOUT);    
+        directive_failed(sc,"Error waiting barrier\n");
+        set_up=true;
+
+      rtems_rate_monotonic_cancel(setup_period_id);
+    }
+  }
+}
+
+
+
+rtems_task High_low_water_sensor()
+{
+  
+  rtems_status_code sc;
+  rtems_id period_id, setup_period_id, timer_id;
+  rtems_name name; 
+  rtems_interval period=6000, setup_period=6000, deadline=400;
+  
+  rtems_rate_monotonic_create(rtems_build_name('P','E','R','5'), &period_id);
+  rtems_rate_monotonic_create(rtems_build_name('S','E','T','5'), &setup_period_id);
+  /* creation of timer, represents the constraint deadline */
+  rtems_timer_create(rtems_build_name('T','M','R','5'), &timer_id);
+
+  while(1)
+  {
+    if(set_up)
+    {
+      rtems_rate_monotonic_period(period_id, period);
+      rtems_timer_fire_after(timer_id, deadline,time_expired_high_low_water_sensor, NULL);    
+        //water_simulation();
+        //high_low_water_periodic_code();
+      rtems_timer_cancel(timer_id);
+    }
+    else
+    {
+      rtems_rate_monotonic_period(setup_period_id, setup_period);
+        sc=rtems_barrier_wait(barrier_id,RTEMS_NO_TIMEOUT);    
+        directive_failed(sc,"Error waiting barrier\n");
+        set_up=true; 
+      rtems_rate_monotonic_cancel(setup_period_id);
+    }
+  }
+}
