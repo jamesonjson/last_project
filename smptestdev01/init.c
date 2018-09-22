@@ -31,7 +31,7 @@ typedef struct
 {
   rtems_id task[3];
   rtems_id semaphore_id;
-  rtems_id sched_a, sched_b
+  rtems_id sched_a, sched_b;
   bool t2_flag;
 } test_context;
 
@@ -249,6 +249,7 @@ rtems_task Init(rtems_task_argument arg)
   test_context *ctx = &test_instance;
 
   TEST_BEGIN();
+  PrintSchedInfo();
   PrintTaskInfo("Init"); //imprime as informações da task Init
   test(ctx);
 
