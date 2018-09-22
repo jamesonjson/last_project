@@ -180,7 +180,18 @@ static void test(test_context *ctx)
   sc = rtems_semaphore_create(
       rtems_build_name('M', 'R', 'S', 'P'),
       1,
-      RTEMS_BINARY_SEMAPHORE,
+      RTEMS_BINARY_SEMAPHORE  | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      1,
+      &ctx->semaphore_id
+      );
+  printf("create_semaphore_status: %s\n", rtems_status_text(sc) );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  
+    //CRIAR OMIP SEMAPHORE
+  sc = rtems_semaphore_create(
+      rtems_build_name('M', 'R', 'S', 'P'),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY,
       1,
       &ctx->semaphore_id
       );
