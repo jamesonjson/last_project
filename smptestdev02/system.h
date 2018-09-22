@@ -11,7 +11,6 @@
 
 #include "test_support.h"
 
-
 #define SCHED_A rtems_build_name('A', ' ', ' ', ' ')
 #define SCHED_B rtems_build_name('B', ' ', ' ', ' ')
 #define BAR_NAME rtems_build_name('B', 'A', 'R', '1')
@@ -50,19 +49,14 @@ rtems_task_argument arg
 #define CONFIGURE_MICROSECONDS_PER_TICK   1000 /* 1 millisecond */
 
 #define CONFIGURE_MAXIMUM_PRIORITY 255
-
 #define CONFIGURE_MAXIMUM_PROCESSORS 4
-//#define CONFIGURE_MAXIMUM_CPU 1
-
 #define CONFIGURE_MAXIMUM_TASKS 4
 
 //STEP 1 tell the system what scheduler algorithm to use
-//#define CONFIGURE_SCHEDULER_EDF_SMP
+
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
 #include <rtems/scheduler.h>
 //STEP 2 - configure THE SCHEDULER INSTANCES
-//#define RTEMS_SCHEDULER_CONTEXT_EDF_SMP(a, CONFIGURE_MAXIMUM_PROCESSORS);
-//#define RTEMS_SCHEDULER_CONTEXT_EDF_SMP(b, CONFIGURE_MAXIMUM_PROCESSORS);
 RTEMS_SCHEDULER_PRIORITY_SMP(a, CONFIGURE_MAXIMUM_PRIORITY + 1);
 RTEMS_SCHEDULER_PRIORITY_SMP(b, CONFIGURE_MAXIMUM_PRIORITY + 1);
 
@@ -86,7 +80,7 @@ RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-//#define CONFIGURE_INIT
+
 #define CONFIGURE_INIT_TASK_STACK_SIZE \
   (3 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 
@@ -95,7 +89,6 @@ RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
 #include <rtems/confdefs.h>
 
 /* global variables */
-
 /*
 *  Keep the names and IDs in global variables so another task can use them.
 */
