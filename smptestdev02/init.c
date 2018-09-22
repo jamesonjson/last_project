@@ -108,10 +108,9 @@ rtems_task Task_3(rtems_task_argument arg)
 static void test(test_context *ctx)
 {
   rtems_status_code sc;
-  bool continuar = true;
+  bool go = true;
 
-  
-  //_CREATE barreira que abre automaticamente quando a 3ª task chega
+  //_CREATE barrier that oneps automatically when third task arrives
   sc = rtems_barrier_create(
       BAR_NAME,
       RTEMS_BARRIER_AUTOMATIC_RELEASE,
@@ -171,7 +170,7 @@ static void test(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Wait on all tasks to run, _DELETE barrier then exit*/
-  while (continuar)
+  while (go)
   {
 
     TestFinished = true;
@@ -185,7 +184,7 @@ static void test(test_context *ctx)
     {
       sc = rtems_barrier_delete(ctx->bar_id);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-      continuar = false;
+      go = false;
     }
   }
 }
