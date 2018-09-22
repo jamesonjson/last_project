@@ -14,8 +14,6 @@
 
 #define SCHED_A rtems_build_name('A', ' ', ' ', ' ')
 
-#define CPU_COUNT 4
-
 #define TASK_COUNT 4
 #define TASKS_PRIO 20
 #define TASK1_PRIO 10
@@ -52,32 +50,28 @@ rtems_task_argument arg
 /**********************************************************************************/
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-//#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_MICROSECONDS_PER_TICK   1000 /* 1 millisecond */
 
 #define CONFIGURE_MAXIMUM_PRIORITY 255
 
-#define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT
-//#define CONFIGURE_MAXIMUM_CPU 1
+#define CONFIGURE_MAXIMUM_PROCESSORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
 //STEP 1 tell the system what scheduler algorithm to use
-//#define CONFIGURE_SCHEDULER_EDF_SMP
+
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
 #include <rtems/scheduler.h>
 //STEP 2 - configure THE SCHEDULER INSTANCES
-//#define RTEMS_SCHEDULER_CONTEXT_EDF_SMP(a, CONFIGURE_MAXIMUM_PROCESSORS);
-//#define RTEMS_SCHEDULER_CONTEXT_EDF_SMP(b, CONFIGURE_MAXIMUM_PROCESSORS);
 RTEMS_SCHEDULER_PRIORITY_SMP(a, CONFIGURE_MAXIMUM_PRIORITY + 1);
 
 //STEP 3
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
 RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( \
   a, \
-   SCHED_A \
+  SCHED_A \
 )
 
 //STEP 4 Scheduler to processor assignment
@@ -94,19 +88,13 @@ RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
 #define CONFIGURE_INIT_TASK_STACK_SIZE \
   (3 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 
-//#define CONFIGURE_INIT_TASK_PRIORITY        5
-
-
 #include <rtems/confdefs.h>
 
 /* global variables */
-
 /*
-*  Keep the names and IDs in global variables so another task can use them.
+*  Keep the names and IDs in global variables that all tasks will use.
 */
-
 void PrintTaskInfo(const char *task_name);
-
 TEST_EXTERN volatile bool TaskRan[ TASK_COUNT ];
 TEST_EXTERN volatile bool  TestFinished;
 
