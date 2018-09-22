@@ -38,7 +38,7 @@ rtems_task Task_3(
 rtems_task_argument arg
 );
 
-/******************************* configuration information ************************/
+/******************************* configuration data ************************/
 /**********************************************************************************/
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 #define CONFIGURE_MAXIMUM_BARRIERS 1
